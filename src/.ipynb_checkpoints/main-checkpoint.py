@@ -28,7 +28,7 @@ while True:
         client.publish(json.dumps(dataToTransmit))
         print(dataToTransmit)
         time.sleep(1)
-    except NoDriverDetectedException:
+    except distractions.NoDriverDetectedException:
         print("No driver found!")
 
     if cv2.waitKey(0) == ord('q'):

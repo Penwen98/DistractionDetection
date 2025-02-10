@@ -1,6 +1,7 @@
 import numpy as np
 import os
 import cv2
+import sys
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Conv2D, MaxPooling2D, Flatten, Dropout
 
@@ -21,7 +22,7 @@ model.add(Dropout(0.25))
 model.add(Flatten())
 model.add(Dense(1024, activation='relu'))
 model.add(Dropout(0.5))
-model.add(Dense(len(categories), activation='softmax'))
+model.add(Dense(5, activation='softmax'))
 
 model.load_weights(sys.path[0] + '/modelweights.h5')
 
@@ -62,7 +63,7 @@ def getDistraction():
     data = {}
     if type(prediction) is np.ndarray:
         for distraction in distr_dict:
-            data[distr_dict[distraction]] = round(prediction[0][distraction].item(), 5)
+            data[distr_dict[distraction]] = round(prediction[0][distraction].item(), 6)
     else:
         raise NoDriverDetectedException
     
