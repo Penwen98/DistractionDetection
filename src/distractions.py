@@ -23,7 +23,7 @@ model.add(Dense(1024, activation='relu'))
 model.add(Dropout(0.5))
 model.add(Dense(len(categories), activation='softmax'))
 
-model.load_weights(sys.path[0] + '/model.weights.h5')
+model.load_weights(sys.path[0] + '/modelweights.h5')
 
 
 def webcamSetup():
