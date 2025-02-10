@@ -18,19 +18,18 @@ while True:
         distractionMap = distractions.getDistraction()
         dataToTransmit = { 
             user["user"]: {
-                "closed_eyes": distractionMap["Closed eyes"],
+                "drinking": distractionMap["Drinking"],
+                "brushing_hair": distractionMap["Brushing hair"],
                 "safe_driving": distractionMap["Safe driving"],
-                "smoking": distractionMap["Smoking"],
                 "talking_phone": distractionMap["Talking phone"],
-                "texting_phone": distractionMap["Texting phone"],
-                "turning": distractionMap["Turning"]
+                "texting_phone": distractionMap["Texting phone"]
             } 
         }
         client.publish(json.dumps(dataToTransmit))
         print(dataToTransmit)
         time.sleep(1)
-    except NoFaceDetectedException:
-        print("No face found!")
+    except NoDriverDetectedException:
+        print("No driver found!")
 
     if cv2.waitKey(0) == ord('q'):
         break

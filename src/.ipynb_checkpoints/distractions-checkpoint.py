@@ -23,7 +23,7 @@ model.add(Dense(1024, activation='relu'))
 model.add(Dropout(0.5))
 model.add(Dense(len(categories), activation='softmax'))
 
-model.load_weights(sys.path[0] + '/modelweights.h5')
+model.load_weights(sys.path[0] + '/model.weights.h5')
 
 
 def webcamSetup():
@@ -33,22 +33,22 @@ def webcamSetup():
     cv2.ocl.setUseOpenCL(False)
 
     # dictionary which assigns each label a state
-    distr_dict = {0: "Closed eyes", 1: "Safe driving", 2: "Smoking", 3: "Talking phone", 4: "Texting phone", 5: "Turning"}
+    distr_dict = {0: "Drinking", 1: "Brushing hair", 2: "Safe driving", 3: "Talking phone", 4: "Texting phone"}
     
     # start the webcam feed
     cap = cv2.VideoCapture(0)
 
-class NoFaceDetectedException(Exception):
+class NoDriverDetectedException(Exception):
     def msg():
-        return "No face detected on the screen"
+        return "No driver detected on the screen"
 
 def getDistraction():
-    # Find haar cascade to draw bounding box around face
+    # Find haar cascade to draw bounding box around person (upper body)
     ret, frame = cap.read()
     if not ret:
         return 0
     
-    facecasc = cv2.CascadeClassifier(sys.path[0] + '/haarcascade_frontalface_default.xml')
+    facecasc = cv2.CascadeClassifier(sys.path[0] + '/haarcascade_upperbody.xml')
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     faces = facecasc.detectMultiScale(gray,scaleFactor=1.05, minNeighbors=5)
     
@@ -62,8 +62,8 @@ def getDistraction():
     data = {}
     if type(prediction) is np.ndarray:
         for distraction in distr_dict:
-            data[distr_dict[distraction]] = round(prediction[0][distraction].item(), 3)
+            data[distr_dict[distraction]] = round(prediction[0][distraction].item(), 5)
     else:
-        raise NoFaceDetectedException
+        raise NoDriverDetectedException
     
     return data
